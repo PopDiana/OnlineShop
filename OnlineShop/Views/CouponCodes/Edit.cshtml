@@ -1,0 +1,40 @@
+﻿@model IdentityCore.Models.CouponCode
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="row" style="margin-top:2%">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CouponCodeId" />
+            <div class="form-group">
+                <label asp-for="CouponName" class="control-label"></label>
+                <input asp-for="CouponName" class="form-control" />
+                <span asp-validation-for="CouponName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CouponPercentage" class="control-label"></label>
+                <input asp-for="CouponPercentage" class="form-control" />
+                <span asp-validation-for="CouponPercentage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="isAvailable" /> Is available?
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

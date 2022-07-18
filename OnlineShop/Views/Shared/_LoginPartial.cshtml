@@ -1,0 +1,44 @@
+@using Microsoft.AspNetCore.Identity
+@using OnlineShop.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+
+            <li>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+            </li>
+            
+            @if (Utils.Instance.productNumber != 0)
+            {
+                <li> <a asp-area="" asp-controller="ShoppingCart" asp-action="Index"><i class="fas fa-shopping-cart"><span class="badge badge-pill badge-danger" style="padding: 0px 4px !important;background-color: crimson !important; color: white">@Utils.Instance.productNumber</span></i></a></li>
+            }
+            else
+            {
+                <li> <a asp-area="" asp-controller="ShoppingCart" asp-action="Index"><i class="fas fa-shopping-cart"></i></a></li>
+            }
+
+        </ul>
+    </form>
+}
+else
+{
+<ul class="nav navbar-nav navbar-right">
+    <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+    <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+    
+    @if (Utils.Instance.productNumber != 0)
+    {
+        <li> <a asp-area="" asp-controller="ShoppingCart" asp-action="Index"><i class="fas fa-shopping-cart"><span class="badge badge-pill badge-danger" style="padding: 0px 4px !important;background-color: crimson !important; color: white">@Utils.Instance.productNumber</span></i></a></li>
+    }
+    else
+    {
+        <li> <a asp-area="" asp-controller="ShoppingCart" asp-action="Index"><i class="fas fa-shopping-cart"></i></a></li>
+    }
+
+</ul>
+}

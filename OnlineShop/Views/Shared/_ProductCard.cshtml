@@ -1,0 +1,66 @@
+﻿@model Product
+
+<div class="col-sm-4 col-lg-4 col-md-4">
+    <div class="thumbnail product">
+        <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId">
+            <img class="poster" style="height:300px" src="@Url.Content("~/images/" + Model.ImagePath)" alt="Image">
+        </a> 
+        <div class="caption">
+            <h3 class="pull-right">@Model.Price.ToString("c")</h3>
+            <h3>
+                @Model.Name
+
+            </h3>
+            @if (Model.Auctioned == true)
+            {
+                <p style="color: #FF0039">AUCTIONED!</p>
+            }
+            else
+            {
+                @if (@Model.InStock == false)
+                {
+                    <p style="color: crimson;">Out of stock</p>
+                }
+                else
+                {
+                    <p>@Model.Description</p>
+                }
+            }
+
+        </div>
+
+            <div class="addToCart">
+                @if (@Model.Auctioned == true)
+                {
+                    <p class="button">
+
+                        <a class="btn btn-danger" style="margin-left:60%"
+                           asp-controller="Products"
+                           asp-action="Details"
+                           asp-route-id="@Model.ProductId"><i class="fa fa-gavel fa-1x"></i> More details</a>
+                    </p>
+                }
+                else
+                {
+                    @if (@Model.InStock == false)
+                    {
+
+
+                        <div style="margin-bottom:54px"></div>
+                    }
+                    else
+                    {
+                        <p class="button">
+
+                            <a class="btn btn-default" style="margin-left:65%"
+                               asp-controller="ShoppingCart"
+                               asp-action="AddToShoppingCart"
+                               asp-route-productId="@Model.ProductId">Add to cart</a>
+                        </p>
+                    }
+                }
+
+
+            </div>
+</div>
+</div>

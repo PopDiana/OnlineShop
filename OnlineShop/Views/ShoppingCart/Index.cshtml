@@ -1,0 +1,88 @@
+﻿
+@model ShoppingCartViewModel
+<div style="margin-top:7%"></div>
+<h3>Your shopping cart</h3>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th class="text-right"></th>
+            <th class="text-right">Selected amount</th>
+            <th class="text-center">Product</th>
+            <th class="text-right">Price</th>
+            <th class="text-right">Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in Model.ShoppingCart.ShoppingCartItems)
+        {
+        <tr>
+
+            <td class="text-center">
+
+                <a asp-controller="ShoppingCart"
+                   asp-action="AddToShoppingCart"
+                   asp-route-productId="@line.Product.ProductId"><span class="glyphicon glyphicon-plus" style="color:black"></span></a>
+                <a style="margin-left:10%" asp-controller="ShoppingCart"
+                   asp-action="RemoveFromShoppingCart"
+                   asp-route-productId="@line.Product.ProductId"><span class="glyphicon glyphicon-minus" style="color:black"></span></a>
+
+
+
+
+            </td>
+            <td class="text-right">@line.Amount</td>
+            <td class="text-center">@line.Product.Name</td>
+            <td class="text-right">@line.Product.Price.ToString("c")</td>
+            <td class="text-right">
+                @((line.Amount * line.Product.Price).ToString("c"))
+            </td>
+        </tr>
+        }
+        @if (Model.Discount != 0)
+        {
+            <tr>
+                <td class="text-center">   </td>
+                <td class="text-center">   </td>
+                <td class="text-left">Discount</td>
+                <td class="text-right">@Model.Discount</td>
+                <td class="text-right">
+                    -@Model.Discount
+                </td>
+            </tr>
+
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4" class="text-right">Total:</td>
+            <td class="text-right">
+                @Model.ShoppingCartTotal.ToString("c")
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+
+<div class="row">
+
+    <div class="col-md-4" style="float:left">
+
+        @using (Html.BeginForm("Index", "ShoppingCart"))
+        {
+            <input type="text" name="voucher" style="margin-bottom:0.5em" />
+
+  
+            <input class="button btn-default" type="submit" value="Apply coupon" />
+  
+            
+        }
+
+    </div>
+
+    <div style="float:right; margin-right:2%">
+        <a class="btn btn-default" asp-controller="Order" asp-action="Checkout">Check out now!</a>
+    </div>
+
+</div>
+
+

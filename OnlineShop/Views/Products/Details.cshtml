@@ -1,0 +1,253 @@
+﻿@model IdentityCore.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+
+<div class="row" style="margin-top:24px">
+    <h3>Product details - @Html.DisplayFor(model => model.Name)</h3>
+    <hr />
+
+    <div class="col-sm-4 col-md-offset-2">
+        <img style="width:300px;height:300px; border-color:black !important; border-width:thick" src="@Url.Content("~/images/" + Model.ImagePath)" alt="Image">
+    </div>
+    <div class="col-md-4">
+        <dl class="dropdown-menu-left">
+
+
+            <dt>
+                Product description:
+
+                <p></p>
+
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+                <br />
+
+                <hr />
+            </dd>
+
+            <dt>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @if (ViewBag.alreadyRated == true)
+                    {
+                        <span class="rateit" id="rate" data-rateit-mode="font" data-rateit-value="@ViewBag.rating"
+                              data-rateit-ispreset="true" data-rateit-readonly="false">
+                        </span>
+                        <br />
+                        <br /><br />
+                    }
+                    else
+                    {
+                        <span class="rateit" id="rate" data-rateit-mode="font">
+                        </span>
+                        <br />
+                        <span id="yourRating"></span>
+                        <br /><br />
+                    }
+
+                }
+                @Html.DisplayNameFor(model => model.Category):
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Category)
+                <p></p>
+            </dd>
+            <dt>
+                Technical specs:
+            </dt>
+            <dd>
+                <a href="@Url.Content("~/documents/" +  Model.TechnicalSpecsDoc)" target="_blank">@Model.TechnicalSpecsDoc</a>
+                <p></p>
+            </dd>
+            <dt>
+
+            </dt>
+            <dd>
+                <form autocomplete="off" class="navbar-form navbar-right" target="_blank" asp-controller="Products" asp-action="Search">
+                    <div>
+
+                        <input type="text" style="width:360px; margin-bottom:1em" class="form-control" name="searchString" placeholder="Search by other specs...">
+
+                    </div>
+
+                </form>
+               
+            </dd>
+            <dt>
+                @if (Model.Auctioned == true)
+                {
+                    <p>Starting price:</p>
+                }
+                else
+                {
+                    <p>Price:</p>
+                }
+
+            </dt>
+            <dd>
+                <h5>£@Html.DisplayFor(model => model.Price)</h5>
+            </dd>
+            <dt>
+
+                <p></p>
+            </dt>
+            @if (Model.Auctioned == true)
+            {
+                <dt>
+                    Highest bid:
+                </dt>
+                <dd>
+                    <h5>£@Html.DisplayFor(model => model.HighestBid)</h5>
+                </dd>
+                <dt>
+                    Available until:
+                </dt>
+                <dd>
+                    <h5>@Html.DisplayFor(model => model.AuctionAvailableUntil)</h5>
+                </dd>
+            }
+        <dd>
+            
+            @if (Model.Auctioned == true)
+            {
+                @if (ViewBag.hasWon)
+                {
+                    <br />
+                    <p class="button">
+
+                        <a class="btn btn-default"
+                           asp-controller="ShoppingCart"
+                           asp-action="AddToShoppingCart"
+                           asp-route-productId="@Model.ProductId">Add to cart</a>
+                    </p>
+                }
+                else
+                {
+                    @if (!ViewBag.auctionClosed)
+                    {
+                        <br />
+                        <form asp-action="Bid" method="post">
+                            <input type="hidden" asp-for="@Model.ProductId" />
+
+                            <input type="number" class="input-sm" id="price" name="price" placeholder="Your bid" />
+
+
+                            <input class="btn btn-default btn-sm"
+                                   type="submit" value="Bid" style="margin-top:-0.5%" />
+                            <p style="color:crimson">@ViewBag.errMsg</p>
+                        </form>
+                    }
+                }
+
+
+
+
+            }
+            else
+            {
+                <br />
+                @if (Model.InStock == false)
+                {
+                    <p style="color:crimson">Out of stock</p>
+                }
+                else
+                {
+
+                    <p class="button">
+
+                        <a class="btn btn-default"
+                           asp-controller="ShoppingCart"
+                           asp-action="AddToShoppingCart"
+                           asp-route-productId="@Model.ProductId">Add to cart</a>
+                    </p>
+
+                }
+            }
+
+        </dd>
+        </dl>
+    </div>
+
+</div>
+
+
+<hr style="margin-top:70px" />
+@if (ViewBag.recommendedProducts != null)
+{
+    <h3 style="margin-bottom:20px; margin-top:5%">Recommended for you:</h3>
+    <div class="row" style="margin-bottom:50px">
+        @foreach (var product in ViewBag.recommendedProducts)
+        {
+            <div class="col-sm-3 col-lg-3 col-md-3">
+                <div class="thumbnail">
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId">
+
+                        <img class="poster" style="height:200px" src="@Url.Content("~/images/" + product.ImagePath)" alt="Image">
+                    </a>
+
+                    <div class="caption row">
+                        <h3 class="col-md-2">@product.Price.ToString("c")</h3>
+
+                        <p class="button col-md-5 pull-right">
+
+                            <a class="btn btn-primary" style="margin-top:10%"
+                               asp-controller="Products"
+                               asp-action="Details"
+                               asp-route-id="@product.ProductId">Details</a>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        }
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/rateit/jquery.rateit.js"></script>
+    <link rel="stylesheet" href="~/js/rateit/rateit.css" />
+    <script type="text/javascript">
+        $("#rate").bind('rated', function (event, value) {
+            $('#yourRating').text('You\'ve rated it: ' + value);
+            var rated = JSON.stringify(value);
+            var id = JSON.stringify(@Model.ProductId);
+            $.ajax({
+                type: "GET",
+                url: "/Products/Rate/",
+                data: {productId: id, rating: rated },
+                success: function (response) {
+
+                },
+                error: function (error) {
+                    alert('Could not add your rating');
+                }
+            });
+
+
+        });
+        $("#rate").bind('reset', function (event, value) {
+            $('#yourRating').text('You removed your rating.');
+            var id = JSON.stringify(@Model.ProductId);
+            $.ajax({
+                type: "GET",
+                url: "/Products/RemoveRating/",
+                data: { productId: id },
+                success: function (response) {
+
+                },
+                error: function (error) {
+                    alert('Could not remove your rating');
+                }
+            });
+        });
+
+
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

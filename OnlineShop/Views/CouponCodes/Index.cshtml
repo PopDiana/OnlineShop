@@ -1,0 +1,45 @@
+﻿@model IEnumerable<IdentityCore.Models.CouponCode>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<p>
+    <a style="margin-top:2%" class="btn btn-default" asp-action="Create">Add new coupon</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Coupon code
+            </th>
+            <th>
+                Percentage
+            </th>
+            <th>
+                Available
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CouponName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CouponPercentage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isAvailable)
+            </td>
+            <td>
+                <a class="btn btn-default" asp-action="Edit" asp-route-id="@item.CouponCodeId">Edit</a>              
+                <a class="btn btn-default" asp-action="Delete" asp-route-id="@item.CouponCodeId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

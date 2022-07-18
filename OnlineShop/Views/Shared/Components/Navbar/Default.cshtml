@@ -1,0 +1,12 @@
+﻿@model IEnumerable<String>
+
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Categories <span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        @foreach (var category in Model)
+        {           
+            <li>@Html.ActionLink(category, "Index", "Home",new { byCategory = category })</li>
+        }
+
+    </ul>
+</li>

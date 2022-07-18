@@ -1,0 +1,17 @@
+﻿@model IdentityCore.Models.Order
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h3>Are you sure you want to delete this order?</h3>
+<div>
+   
+        
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="OrderId" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a class="btn btn-default" asp-action="Index">Back to List</a>
+    </form>
+</div>

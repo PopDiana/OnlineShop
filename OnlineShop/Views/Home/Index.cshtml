@@ -1,0 +1,73 @@
+﻿@model ICollection<Product>
+<partial name="_Carousel" />
+
+<div style="margin-left:6px; margin-top:50px; margin-bottom:20px">
+
+
+    @if (ViewBag.recommendedProducts != null)
+    {
+        <h3 style="margin-bottom:20px">Others have liked:</h3>
+
+        <div class="row">
+            @foreach (var product in ViewBag.recommendedProducts)
+            {
+                <div class="col-sm-3 col-lg-3 col-md-3">
+                    <div class="thumbnail">
+                        <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId">
+
+                            <img class="poster" style="height:200px" src="@Url.Content("~/images/" + product.ImagePath)" alt="Image">
+                        </a>
+
+                        <div class="caption row">
+                            <h3 class="col-md-2">@product.Price.ToString("c")</h3>
+
+                            <p class="button col-md-5 pull-right">
+
+                                <a class="btn btn-primary" style="margin-top:10%"
+                                   asp-controller="Products"
+                                   asp-action="Details"
+                                   asp-route-id="@product.ProductId">Details</a>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            }
+        </div>
+        <hr style="margin-bottom:50px" />
+    }
+
+    @if (ViewBag.searchString != null)
+    {
+        <h4>Search results for '@ViewBag.searchString'</h4>
+    }
+
+    <div class="col-md-12">
+
+        <div class="btn-group" style="float:right">
+            <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                Sort & Filter
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Price ascending", "Index", "Home", new { priceAsc = true })</li>
+                <li>@Html.ActionLink("Price descending", "Index", "Home", new { priceDesc = true })</li>
+                <li>@Html.ActionLink("Name ascending", "Index", "Home", new { nameAsc = true })</li>
+                <li>@Html.ActionLink("Name descending", "Index", "Home", new { nameDesc = true })</li>
+                <li>@Html.ActionLink("In stock", "Index", "Home", new { stock = true })</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top:10%">
+
+
+
+    @foreach (var product in Model)
+    {
+        <partial name="_ProductCard" model="product" />
+    }
+
+</div>

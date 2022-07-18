@@ -1,0 +1,56 @@
+﻿
+@model IEnumerable<IdentityCore.Models.Product>
+
+
+<h3 style="margin-top:3em">Search results for '@ViewBag.searchString'</h3>
+
+<div class="row" style="margin-top:3em">
+
+    <div class="pull-left" style="padding-left: 1.3em;
+    margin-bottom: 2em;">
+        <b>Sort:</b>
+        @Html.ActionLink("asc", "Search", "Products", new { sort = "asc", searchString = ViewBag.searchString }) -
+        @Html.ActionLink("desc", "Search", "Products", new { sort = "desc", searchString = ViewBag.searchString })
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-controller="Products" asp-route-id="@item.ProductId">
+                        @item.Name
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
